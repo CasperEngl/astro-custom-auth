@@ -1,0 +1,13 @@
+---
+import Layout from '~/components/layout.astro';
+import { LoginForm } from '~/components/login-form';
+---
+
+<Layout>
+  <div class="container max-w-lg min-h-screen flex flex-col justify-center">
+    <h1 class="text-2xl">Login</h1>
+    <div class="pt-8">
+      <LoginForm client:load />
+    </div>
+  </div>
+</Layout>
