@@ -1,0 +1,30 @@
+---
+import Layout from '~/components/layout.astro';
+import { Button } from '~/components/ui/button';
+import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
+---
+
+<Layout>
+  <div class="container max-w-lg min-h-screen flex flex-col justify-center">
+    <h1 class="text-2xl">Register</h1>
+
+    <div class="pt-8">
+      <form action="/api/register" method="post" class="space-y-4">
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input type="email" id="email" name="email" placeholder="user@example.com" required />
+        </div>
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input type="password" id="password" name="password" placeholder="••••••••" required />
+        </div>
+        <div>
+          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required />
+        </div>
+        <Button type="submit">Register</Button>
+      </form>
+    </div>
+  </div>
+---
