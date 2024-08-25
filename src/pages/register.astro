@@ -1,11 +1,76 @@
 ---
+import { hash } from "argon2";
+import { eq } from "drizzle-orm";
+import { createForm, validateForm } from "simple:form";
+import { scope } from "simple:scope";
+import { z } from "zod";
 import FormMessage from "~/components/form-message.astro";
 import Layout from "~/components/layout.astro";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { db } from "~/db";
+import { Users } from "~/db/schema";
 
 const errors = Astro.locals.getFlashes("error");
+
+const register = createForm({
+	email: z
+		.string()
+		.email()
+		.refine(async (email) => {
+			const [user] = await db
+				.select({ id: Users.id })
+				.from(Users)
+				.where(eq(Users.email, email));
+
+			return !user;
+		}, "Email already exists"),
+	password: z.string().min(6, "Password must be at least 6 characters"),
+	firstName: z.string().min(2, "First name must be at least 2 characters"),
+	lastName: z.string().min(2, "Last name must be at least 2 characters"),
+});
+
+if (Astro.request.method === "POST") {
+	const parsed = await validateForm({
+		formData: await Astro.request.formData(),
+		validator: register.validator,
+	});
+
+	if (parsed.data) {
+		const hashedPassword = await hash(parsed.data.password);
+
+		try {
+			await db
+				.insert(Users)
+				.values({
+					email: parsed.data.email,
+					password: hashedPassword,
+					firstName: parsed.data.firstName,
+					lastName: parsed.data.lastName,
+				})
+				.returning();
+		} catch (error) {
+			return new Response("Something went wrong", {
+				status: 500,
+			});
+		}
+
+		return new Response(null, {
+			status: 303,
+			headers: {
+				Location: "/login",
+			},
+		});
+	}
+
+	return new Response(null, {
+		status: 307,
+		headers: {
+			Location: "/register",
+		},
+	});
+}
 ---
 
 <Layout>
@@ -13,13 +78,13 @@ const errors = Astro.locals.getFlashes("error");
 		<h1 class="text-2xl">Register</h1>
 
 		<div class="pt-8">
-			<form action="/api/register" method="post" class="space-y-4">
+			<form method="POST" class="space-y-4">
 				<div class="grid gap-4 grid-cols-2">
 					<div>
-						<Label htmlFor="firstName">First Name</Label>
+						<Label htmlFor={scope("firstName")}>First Name</Label>
 						<Input
 							type="text"
-							id="firstName"
+							id={scope("firstName")}
 							name="firstName"
 							placeholder="John"
 							required
@@ -27,10 +92,10 @@ const errors = Astro.locals.getFlashes("error");
 						<FormMessage message={errors.firstName} />
 					</div>
 					<div>
-						<Label htmlFor="lastName">Last Name</Label>
+						<Label htmlFor={scope("lastName")}>Last Name</Label>
 						<Input
 							type="text"
-							id="lastName"
+							id={scope("lastName")}
 							name="lastName"
 							placeholder="Doe"
 							required
@@ -38,46 +103,35 @@ const errors = Astro.locals.getFlashes("error");
 						<FormMessage message={errors.lastName} />
 					</div>
 					<div class="col-span-2">
-						<Label htmlFor="email">Email</Label>
+						<Label htmlFor={scope("email")}>Email</Label>
 						<Input
 							type="email"
-							id="email"
+							id={scope("email")}
 							name="email"
 							placeholder="user@example.com"
 							required
 						/>
 						<FormMessage message={errors.email} />
 					</div>
-					<div>
-						<Label htmlFor="password">Password</Label>
+					<div class="col-span-2">
+						<Label htmlFor={scope("password")}>Password</Label>
 						<Input
 							type="password"
-							id="password"
+							id={scope("password")}
 							name="password"
 							placeholder="••••••••"
 							required
 						/>
 						<FormMessage message={errors.password} />
 					</div>
-					<div>
-						<Label htmlFor="confirmPassword">Confirm Password</Label>
-						<Input
-							type="password"
-							id="confirmPassword"
-							name="confirmPassword"
-							placeholder="••••••••"
-							required
-						/>
-						<FormMessage message={errors.confirmPassword} />
-					</div>
 				</div>
 
 				<Button type="submit">Register</Button>
 
 				<p class="pt-4">
-					Already have an account? <a href="/login" class="text-blue-500"
-						>Login</a
-					>
+					Already have an account? <a href="/login" class="text-blue-500">
+						Login
+					</a>
 				</p>
 			</form>
 		</div>
