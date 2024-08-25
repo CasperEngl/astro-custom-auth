@@ -1,19 +1,14 @@
 import type { APIContext } from "astro";
-import cookie from "cookie";
-import { destroySession } from "~/db/session";
+import { destroySession, getSession } from "~/db/session";
 
 export async function POST(context: APIContext) {
-  const { session } = cookie.parse(context.request.headers.get("Cookie") ?? "");
+	const session = await getSession(context.request);
 
-  if (!session) {
-    return new Response("No sessionId found", { status: 400 });
-  }
+	if (!session) {
+		return context.rewrite("/login");
+	}
 
-  return new Response(null, {
-    status: 303,
-    headers: {
-      "Set-Cookie": await destroySession(context.request),
-      "Location": "/",
-    },
-  });
+	context.request.headers.set("Cookie", await destroySession(context.request));
+
+	return context.redirect("/");
 }
