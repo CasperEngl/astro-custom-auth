@@ -1,0 +1,16 @@
+---
+import { cn } from "~/lib/utils";
+
+interface Props {
+	class?: string;
+	message?: string[];
+}
+
+const { class: className, ...props } = Astro.props;
+---
+
+{Astro.props.message ? (
+  <p class={cn("text-sm font-medium text-destructive", className)} {...props}>
+    {Astro.props.message.join(', ')}
+  </p>
+) : null}
