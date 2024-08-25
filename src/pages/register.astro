@@ -1,30 +1,85 @@
 ---
-import Layout from '~/components/layout.astro';
-import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import { Label } from '~/components/ui/label';
+import FormMessage from "~/components/form-message.astro";
+import Layout from "~/components/layout.astro";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+
+const errors = Astro.locals.getFlashes("error");
 ---
 
 <Layout>
-  <div class="container max-w-lg min-h-screen flex flex-col justify-center">
-    <h1 class="text-2xl">Register</h1>
+	<div class="container max-w-lg min-h-screen flex flex-col justify-center">
+		<h1 class="text-2xl">Register</h1>
 
-    <div class="pt-8">
-      <form action="/api/register" method="post" class="space-y-4">
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" name="email" placeholder="user@example.com" required />
-        </div>
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <Input type="password" id="password" name="password" placeholder="••••••••" required />
-        </div>
-        <div>
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <Input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" required />
-        </div>
-        <Button type="submit">Register</Button>
-      </form>
-    </div>
-  </div>
----
+		<div class="pt-8">
+			<form action="/api/register" method="post" class="space-y-4">
+				<div class="grid gap-4 grid-cols-2">
+					<div>
+						<Label htmlFor="firstName">First Name</Label>
+						<Input
+							type="text"
+							id="firstName"
+							name="firstName"
+							placeholder="John"
+							required
+						/>
+						<FormMessage message={errors.firstName} />
+					</div>
+					<div>
+						<Label htmlFor="lastName">Last Name</Label>
+						<Input
+							type="text"
+							id="lastName"
+							name="lastName"
+							placeholder="Doe"
+							required
+						/>
+						<FormMessage message={errors.lastName} />
+					</div>
+					<div class="col-span-2">
+						<Label htmlFor="email">Email</Label>
+						<Input
+							type="email"
+							id="email"
+							name="email"
+							placeholder="user@example.com"
+							required
+						/>
+						<FormMessage message={errors.email} />
+					</div>
+					<div>
+						<Label htmlFor="password">Password</Label>
+						<Input
+							type="password"
+							id="password"
+							name="password"
+							placeholder="••••••••"
+							required
+						/>
+						<FormMessage message={errors.password} />
+					</div>
+					<div>
+						<Label htmlFor="confirmPassword">Confirm Password</Label>
+						<Input
+							type="password"
+							id="confirmPassword"
+							name="confirmPassword"
+							placeholder="••••••••"
+							required
+						/>
+						<FormMessage message={errors.confirmPassword} />
+					</div>
+				</div>
+
+				<Button type="submit">Register</Button>
+
+				<p class="pt-4">
+					Already have an account? <a href="/login" class="text-blue-500"
+						>Login</a
+					>
+				</p>
+			</form>
+		</div>
+	</div>
+</Layout>
