@@ -1,9 +1,9 @@
-import type { APIContext } from "astro";
-import { db } from "../../db";
-import { users } from "../../db/schema";
-import { eq } from "drizzle-orm";
 import { verify } from "argon2";
-import { createSession } from "../../db/session";
+import type { APIContext } from "astro";
+import { eq } from "drizzle-orm";
+import { db } from "~/db";
+import { Users } from "~/db/schema";
+import { createSession } from "~/db/session";
 
 export async function POST(context: APIContext) {
   const formData = await context.request.formData();
@@ -14,17 +14,23 @@ export async function POST(context: APIContext) {
     return new Response("Email and password are required", { status: 400 });
   }
 
-  const [user] = await db
-    .select({ id: users.id, password: users.password })
-    .from(users)
-    .where(eq(users.email, email));
+  const [user] = await db.select().from(Users).where(eq(Users.email, email));
 
-  if (user && (await verify(user.password, password))) {
-    return new Response(null, {
-      status: 200,
-      headers: {
-        "Set-Cookie": await createSession(user.id),
-      },
-    });
+  if (!user) {
+    return new Response("Invalid email or password", { status: 400 });
   }
+
+  const passwordMatch = await verify(user.password, password);
+
+  if (!passwordMatch) {
+    return new Response("Invalid email or password", { status: 400 });
+  }
+
+  return new Response(null, {
+    status: 302,
+    headers: {
+      "Set-Cookie": await createSession(user.id),
+      "Location": "/",
+    },
+  });
 }
