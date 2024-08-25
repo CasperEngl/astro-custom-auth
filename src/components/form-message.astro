@@ -9,8 +9,10 @@ interface Props {
 const { class: className, ...props } = Astro.props;
 ---
 
-{Astro.props.message ? (
-  <p class={cn("text-sm font-medium text-destructive", className)} {...props}>
-    {Astro.props.message.join(', ')}
-  </p>
-) : null}
+{
+	Astro.props.message ? (
+		<p class={cn("text-sm font-medium text-destructive", className)} {...props}>
+			{Astro.props.message.join(", ")}
+		</p>
+	) : null
+}
