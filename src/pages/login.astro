@@ -1,13 +1,32 @@
 ---
-import Layout from '~/components/layout.astro';
-import { LoginForm } from '~/components/login-form';
+import Layout from "~/components/layout.astro";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 ---
 
 <Layout>
   <div class="container max-w-lg min-h-screen flex flex-col justify-center">
     <h1 class="text-2xl">Login</h1>
+
     <div class="pt-8">
-      <LoginForm client:load />
+      <form action="/api/login" method="post" class="space-y-4">
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input type="email" id="email" name="email" placeholder="user@example.com" required />
+        </div>
+
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input type="password" id="password" name="password" placeholder="••••••••" required />
+        </div>
+
+        <Button type="submit">Login</Button>
+      </form>
+      
+      <p class="pt-4">
+        Don't have an account? <a href="/register" class="text-blue-500">Register</a>
+      </p>
     </div>
   </div>
 </Layout>
