@@ -1,9 +1,9 @@
-import { randomBytes } from "node:crypto";
-import { eq } from "drizzle-orm";
 import cookie from "cookie";
-import { db } from ".";
-import { sessions } from "./schema";
+import { eq } from "drizzle-orm";
 import ms from "ms";
+import { randomBytes } from "node:crypto";
+import { db } from ".";
+import { Sessions } from "./schema";
 
 function createSessionId() {
   return randomBytes(16).toString("hex");
@@ -13,32 +13,50 @@ export async function createSession(userId: number) {
   const sessionId = createSessionId();
 
   // Store the session in the database
-  const [row] = await db
-    .insert(sessions)
+  db.insert(Sessions)
     .values({
       sessionId,
       userId,
     })
-    .returning({ expiresAt: sessions.expiresAt });
+    .run();
 
   // Return the session cookie
   return cookie.serialize("session", sessionId, {
     httpOnly: true,
     secure: import.meta.env.NODE_ENV === "production",
-    maxAge: row.expiresAt ? Number.parseInt(row.expiresAt) : ms("1 day"),
+    maxAge: ms("1 day") / 1000,
     path: "/",
   });
 }
 
-export async function getSession(sessionId: string) {
-  const rows = await db
-    .select({ userId: sessions.userId })
-    .from(sessions)
-    .where(eq(sessions.sessionId, sessionId));
+export async function getSession(request: Request) {
+  const parsedCookie = cookie.parse(request.headers.get("cookie") ?? "");
 
-  return rows.at(0)?.userId;
+  if (!parsedCookie.session) {
+    return null;
+  }
+
+  const [session] = await db
+    .select()
+    .from(Sessions)
+    .where(eq(Sessions.sessionId, parsedCookie.session));
+
+  return session;
 }
 
-export async function destroySession(sessionId: string) {
-  await db.delete(sessions).where(eq(sessions.sessionId, sessionId));
+export async function destroySession(request: Request) {
+  const session = await getSession(request);
+
+  if (!session) {
+    throw new Error("No session found");
+  }
+
+  await db.delete(Sessions).where(eq(Sessions.sessionId, session.sessionId));
+
+  return cookie.serialize("session", "", {
+    httpOnly: true,
+    secure: import.meta.env.NODE_ENV === "production",
+    maxAge: 0,
+    path: "/",
+  });
 }
