@@ -12,8 +12,6 @@ import { Label } from "~/components/ui/label";
 import { db } from "~/db";
 import { Users } from "~/db/schema";
 
-const errors = Astro.locals.getFlashes("error");
-
 const register = createForm({
 	email: z
 		.string()
@@ -31,6 +29,10 @@ const register = createForm({
 	lastName: z.string().min(2, "Last name must be at least 2 characters"),
 });
 
+const result = await Astro.locals.form.getData(register);
+
+console.log("result", result);
+
 if (Astro.request.method === "POST") {
 	const parsed = await validateForm({
 		formData: await Astro.request.formData(),
@@ -41,7 +43,7 @@ if (Astro.request.method === "POST") {
 		const hashedPassword = await hash(parsed.data.password);
 
 		try {
-			await db
+			const user = await db
 				.insert(Users)
 				.values({
 					email: parsed.data.email,
@@ -50,26 +52,17 @@ if (Astro.request.method === "POST") {
 					lastName: parsed.data.lastName,
 				})
 				.returning();
+
+			console.log("user", user);
 		} catch (error) {
+			console.log(error);
 			return new Response("Something went wrong", {
 				status: 500,
 			});
 		}
 
-		return new Response(null, {
-			status: 303,
-			headers: {
-				Location: "/login",
-			},
-		});
+		return Astro.redirect("/login");
 	}
-
-	return new Response(null, {
-		status: 307,
-		headers: {
-			Location: "/register",
-		},
-	});
 }
 ---
 
@@ -83,46 +76,48 @@ if (Astro.request.method === "POST") {
 					<div>
 						<Label htmlFor={scope("firstName")}>First Name</Label>
 						<Input
-							type="text"
 							id={scope("firstName")}
-							name="firstName"
 							placeholder="John"
 							required
+							{...register.inputProps.firstName}
+							autoComplete="given-name"
 						/>
-						<FormMessage message={errors.firstName} />
+						<FormMessage message={result?.fieldErrors?.firstName} />
 					</div>
 					<div>
 						<Label htmlFor={scope("lastName")}>Last Name</Label>
 						<Input
-							type="text"
 							id={scope("lastName")}
-							name="lastName"
 							placeholder="Doe"
 							required
+							{...register.inputProps.lastName}
+							autoComplete="family-name"
 						/>
-						<FormMessage message={errors.lastName} />
+						<FormMessage message={result?.fieldErrors?.lastName} />
 					</div>
 					<div class="col-span-2">
 						<Label htmlFor={scope("email")}>Email</Label>
 						<Input
-							type="email"
 							id={scope("email")}
-							name="email"
 							placeholder="user@example.com"
 							required
+							{...register.inputProps.email}
+							type="email"
+							autoComplete="email"
 						/>
-						<FormMessage message={errors.email} />
+						<FormMessage message={result?.fieldErrors?.email} />
 					</div>
 					<div class="col-span-2">
 						<Label htmlFor={scope("password")}>Password</Label>
 						<Input
-							type="password"
 							id={scope("password")}
-							name="password"
 							placeholder="••••••••"
 							required
+							{...register.inputProps.password}
+							type="password"
+							autoComplete="new-password"
 						/>
-						<FormMessage message={errors.password} />
+						<FormMessage message={result?.fieldErrors?.password} />
 					</div>
 				</div>
 
