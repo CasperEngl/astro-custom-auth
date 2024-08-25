@@ -1,22 +1,51 @@
 ---
-import { db } from '~/db'
+import Layout from "~/components/layout.astro";
+import { buttonVariants } from "~/components/ui/button";
+import { db } from "~/db";
+import { Users } from "~/db/schema";
 
-const users = await db.query.users.findMany()
+const users = await db.select().from(Users).limit(10);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
+<Layout>
+	<div class="container max-w-lg min-h-screen flex flex-col justify-center">
+		<div class="space-y-4">
+			<h1 class="text-2xl">Astro Custom Auth</h1>
 
-		{users.map(user => (
-			<div>{user.email}</div>
-		))}
-	</body>
-</html>
+			<p>Hello, {Astro.locals.currentUser?.fullName ?? "stranger"}!</p>
+
+			<div class="flex gap-2 flex-wrap">
+				{
+					Astro.locals.currentUser ? (
+						<form action="/api/logout" method="post">
+							<button type="submit" class={buttonVariants()}>
+								Logout
+							</button>
+						</form>
+					) : (
+						<>
+							<a href="/login" class={buttonVariants()}>
+								Login
+							</a>
+							<a href="/register" class={buttonVariants()}>
+								Register
+							</a>
+						</>
+					)
+				}
+			</div>
+
+			<h2 class="text-xl">Users</h2>
+
+			<ul>
+				{
+					users.map((user) => (
+						<li>
+							{user.fullName} ({user.email})
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</Layout>
