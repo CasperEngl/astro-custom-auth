@@ -29,22 +29,16 @@ if (Astro.request.method === "POST") {
 		validator: login.validator,
 	});
 
-	console.log("parsed", parsed);
-
 	if (parsed.data) {
 		const [user] = await db
 			.select()
 			.from(Users)
 			.where(eq(Users.email, parsed.data.email));
 
-		console.log("user", user);
-
 		if (!user) {
 			errorMessage = "Invalid email or password";
 		} else {
 			const passwordMatch = await verify(user.password, parsed.data.password);
-
-			console.log("passwordMatch", passwordMatch);
 
 			if (!passwordMatch) {
 				errorMessage = "Invalid email or password";

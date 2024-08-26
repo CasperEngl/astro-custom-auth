@@ -31,8 +31,6 @@ const register = createForm({
 
 const result = await Astro.locals.form.getData(register);
 
-console.log("result", result);
-
 if (Astro.request.method === "POST") {
 	const parsed = await validateForm({
 		formData: await Astro.request.formData(),
@@ -43,7 +41,7 @@ if (Astro.request.method === "POST") {
 		const hashedPassword = await hash(parsed.data.password);
 
 		try {
-			const user = await db
+			await db
 				.insert(Users)
 				.values({
 					email: parsed.data.email,
@@ -52,10 +50,7 @@ if (Astro.request.method === "POST") {
 					lastName: parsed.data.lastName,
 				})
 				.returning();
-
-			console.log("user", user);
 		} catch (error) {
-			console.log(error);
 			return new Response("Something went wrong", {
 				status: 500,
 			});
