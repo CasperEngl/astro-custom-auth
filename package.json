@@ -1,26 +1,22 @@
 {
 	"name": "astro-custom-auth",
-	"type": "module",
 	"version": "0.0.1",
+	"type": "module",
 	"scripts": {
-		"dev": "astro dev",
-		"start": "astro dev",
+		"astro": "astro",
 		"build": "astro check && astro build",
+		"dev": "astro dev",
 		"preview": "astro preview",
-		"astro": "astro"
+		"start": "astro dev"
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.9.3",
+		"@astrojs/node": "^8.3.3",
 		"@astrojs/react": "^3.6.2",
 		"@astrojs/tailwind": "^5.1.0",
 		"@hookform/resolvers": "^3.9.0",
 		"@radix-ui/react-label": "^2.1.0",
 		"@radix-ui/react-slot": "^1.1.0",
-		"@types/better-sqlite3": "^7.6.11",
-		"@types/invariant": "^2.2.37",
-		"@types/ms": "^0.7.34",
-		"@types/react": "^18.3.4",
-		"@types/react-dom": "^18.3.0",
 		"argon2": "^0.40.3",
 		"astro": "^4.14.5",
 		"better-sqlite3": "^11.2.1",
@@ -32,8 +28,6 @@
 		"invariant": "^2.2.4",
 		"lucide-react": "^0.435.0",
 		"ms": "^2.1.3",
-		"prettier-plugin-astro": "^0.14.1",
-		"prettier-plugin-tailwindcss": "^0.6.6",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"react-hook-form": "^7.53.0",
@@ -47,7 +41,14 @@
 		"zod-form-data": "^2.0.2"
 	},
 	"devDependencies": {
+		"@types/better-sqlite3": "^7.6.11",
 		"@types/bun": "^1.1.7",
-		"drizzle-kit": "^0.24.1"
+		"@types/invariant": "^2.2.37",
+		"@types/ms": "^0.7.34",
+		"@types/react": "^18.3.4",
+		"@types/react-dom": "^18.3.0",
+		"drizzle-kit": "^0.24.1",
+		"prettier-plugin-astro": "^0.14.1",
+		"prettier-plugin-tailwindcss": "^0.6.6"
 	}
 }
