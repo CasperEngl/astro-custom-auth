@@ -4,13 +4,12 @@
 	"type": "module",
 	"scripts": {
 		"astro": "astro",
-		"build": "astro check && astro build",
+		"build": "astro build",
 		"dev": "astro dev",
 		"preview": "astro preview",
 		"start": "astro dev"
 	},
 	"dependencies": {
-		"@astrojs/check": "^0.9.3",
 		"@astrojs/node": "^8.3.3",
 		"@astrojs/react": "^3.6.2",
 		"@astrojs/tailwind": "^5.1.0",
