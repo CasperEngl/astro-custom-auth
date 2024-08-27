@@ -4,6 +4,8 @@ Welcome to Astro Custom Auth, a minimal app for an authentication system with As
 
 ## Quick Start
 
+Bun:
+
 ```bash
 # Copy env.example to .env
 cp .env.example .env
