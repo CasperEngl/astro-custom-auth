@@ -8,7 +8,11 @@ export async function POST(context: APIContext) {
 		return context.rewrite("/login");
 	}
 
-	context.request.headers.set("Cookie", await destroySession(context.request));
+	const cookies = await destroySession(context.request);
 
-	return context.redirect("/");
+	const response = context.redirect("/");
+
+	response.headers.set("Set-Cookie", cookies.join("; "));
+
+	return response;
 }
