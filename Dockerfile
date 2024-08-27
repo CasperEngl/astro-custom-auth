@@ -1,7 +1,6 @@
 FROM oven/bun:latest AS runtime
 WORKDIR /app
 
-# Install build-essential
 RUN apt-get update && apt-get install -y build-essential
 
 COPY . .
