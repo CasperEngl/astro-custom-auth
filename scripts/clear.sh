@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm sqlite.db
+rm data/sqlite.db
 bunx drizzle-kit generate
 bunx drizzle-kit migrate
