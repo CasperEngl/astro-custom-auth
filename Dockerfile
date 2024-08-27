@@ -9,6 +9,6 @@ RUN bun install --production
 RUN bun run build
 
 ENV HOST=0.0.0.0
-ENV PORT=3000
-EXPOSE 3000
+ENV PORT=8080
+EXPOSE 8080
 CMD bun ./dist/server/entry.mjs
