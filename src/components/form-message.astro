@@ -13,7 +13,11 @@ const { class: className, ...props } = Astro.props;
 
 {
 	Astro.props.message ? (
-		<p class={cn("text-sm font-medium text-destructive", className)} {...props}>
+		<p
+			class={cn("text-sm font-medium text-destructive", className)}
+			{...props}
+			aria-live="assertive"
+		>
 			{Astro.props.message.join(", ")}
 		</p>
 	) : null
