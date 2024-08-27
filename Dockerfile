@@ -7,8 +7,9 @@ RUN apt-get update && apt-get install -y build-essential curl vim && \
 
 COPY . .
 
-RUN bun install --production
+RUN bun install
 RUN bun run build
+RUN bun run migrate
 
 EXPOSE $PORT
 
