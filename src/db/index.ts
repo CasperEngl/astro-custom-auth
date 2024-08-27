@@ -3,11 +3,17 @@ import { Database } from "bun:sqlite";
 import * as schema from "./schema";
 import invariant from "invariant";
 
-invariant(process.env.DATABASE_URL, "DATABASE_URL is not set");
+invariant(
+	process.env.DATABASE_URL || import.meta.env.DATABASE_URL,
+	"DATABASE_URL is not set",
+);
 
-const sqlite = new Database(process.env.DATABASE_URL, {
-	create: true,
-});
+const sqlite = new Database(
+	process.env.DATABASE_URL || import.meta.env.DATABASE_URL,
+	{
+		create: true,
+	},
+);
 export const db = drizzle(sqlite, {
 	schema,
 });
