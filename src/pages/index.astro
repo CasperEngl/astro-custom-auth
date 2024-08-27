@@ -10,7 +10,7 @@ const users = await db.select().from(Users).limit(10);
 <Layout>
 	<div class="container max-w-lg min-h-screen flex flex-col justify-center">
 		<div class="space-y-4">
-			<h1 class="text-2xl">Astro Custom Auth</h1>
+			<h1 class="text-2xl" transition:name="title">Astro Custom Auth</h1>
 
 			<p>Hello, {Astro.locals.currentUser?.fullName ?? "stranger"}!</p>
 
