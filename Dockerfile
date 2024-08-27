@@ -10,8 +10,8 @@ COPY . .
 RUN mkdir -p /app/data
 
 RUN bun install
-RUN bun run build
-RUN bun run migrate
+RUN bun --bun run build
+RUN bun --bun run migrate
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT
