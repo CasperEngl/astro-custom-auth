@@ -12,7 +12,13 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { db } from "~/db";
 import { Users } from "~/db/schema";
-import { createSession } from "~/db/session";
+import { createSession, getSession } from "~/db/session";
+
+const session = await getSession(Astro.request);
+
+if (session) {
+	return Astro.redirect("/");
+}
 
 const login = createForm({
 	email: z.string().email(),
