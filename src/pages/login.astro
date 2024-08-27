@@ -28,10 +28,12 @@ const login = createForm({
 const result = await Astro.locals.form.getData(login);
 
 let errorMessage = "";
+let formData: FormData | null = null;
 
 if (Astro.request.method === "POST") {
+	formData = await Astro.request.formData();
 	const parsed = await validateForm({
-		formData: await Astro.request.formData(),
+		formData,
 		validator: login.validator,
 	});
 
@@ -60,6 +62,8 @@ if (Astro.request.method === "POST") {
 		}
 	}
 }
+
+const autofocusElement = Astro.request.method === "POST" ? "password" : "email";
 ---
 
 <Layout>
@@ -75,12 +79,12 @@ if (Astro.request.method === "POST") {
 			}
 		</div>
 
-		<div transition:name="content">
-			<h1 class="text-2xl">Login</h1>
+		<h1 class="text-2xl" transition:name="title">Login</h1>
 
-			<div class="pt-8">
-				<form method="POST" class="space-y-4" transition:persist>
-					<div>
+		<div class="pt-8">
+			<form method="POST" class="space-y-4">
+				<div class="grid gap-4 grid-cols-1" transition:name="form">
+					<div transition:name="email">
 						<Label htmlFor={scope("email")}>Email</Label>
 						<Input
 							id={scope("email")}
@@ -88,11 +92,12 @@ if (Astro.request.method === "POST") {
 							required
 							{...login.inputProps.email}
 							type="email"
+							defaultValue={formData?.get("email")?.toString()}
+							autoFocus={autofocusElement === "email" || undefined}
 						/>
 						<FormMessage message={result?.fieldErrors?.email} />
 					</div>
-
-					<div>
+					<div transition:name="password">
 						<Label htmlFor={scope("password")}>Password</Label>
 						<Input
 							id={scope("password")}
@@ -100,19 +105,20 @@ if (Astro.request.method === "POST") {
 							required
 							{...login.inputProps.password}
 							type="password"
+							autoFocus={autofocusElement === "password" || undefined}
 						/>
 						<FormMessage message={result?.fieldErrors?.password} />
 					</div>
+				</div>
 
-					<Button type="submit">Login</Button>
-				</form>
+				<Button type="submit" transition:name="submit">Login</Button>
 
 				<p class="pt-4" transition:name="register">
 					Don't have an account? <a href="/register" class="text-blue-500">
 						Register
 					</a>
 				</p>
-			</div>
+			</form>
 		</div>
 	</div>
 </Layout>
