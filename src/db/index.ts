@@ -1,7 +1,8 @@
-import { drizzle } from "drizzle-orm/bun-sqlite";
 import { Database } from "bun:sqlite";
-import * as schema from "./schema";
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/bun-sqlite";
 import invariant from "invariant";
+import * as schema from "./schema";
 
 invariant(
 	process.env.DATABASE_URL || import.meta.env.DATABASE_URL,
