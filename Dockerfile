@@ -1,14 +1,13 @@
 FROM oven/bun:latest AS runtime
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential
+RUN apt-get update && apt-get install -y build-essential curl vim
 
 COPY . .
 
 RUN bun install --production
 RUN bun run build
 
-ENV HOST=0.0.0.0
-ENV PORT=8080
-EXPOSE 8080
+EXPOSE $PORT
+
 CMD bun ./dist/server/entry.mjs
