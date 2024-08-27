@@ -2,6 +2,19 @@
 
 Welcome to Astro Custom Auth, a minimal app for an authentication system with Astro, React, and Tailwind CSS. This app demonstrates how to set up user registration, login, and session management using modern web technologies.
 
+## Quick Start
+
+```bash
+# Install dependencies
+bun install
+
+# Apply database migrations
+bun run migrate
+
+# Start the development server
+bun run dev
+```
+
 ## 🚀 Project Structure
 
 Inside the Astro project, you'll find the following folders and files:
