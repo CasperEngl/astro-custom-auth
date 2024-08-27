@@ -9,6 +9,7 @@ COPY . .
 
 RUN bun install
 RUN bun --bun run build
+RUN bun --bun run migrate
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT

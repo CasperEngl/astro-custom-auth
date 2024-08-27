@@ -8,5 +8,3 @@ services:
       - DATABASE_URL=/app/data/sqlite.db
     volumes:
       - ./data:/app/data
-    command: >
-      sh -c "bun --bun run migrate"
