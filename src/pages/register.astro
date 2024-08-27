@@ -11,6 +11,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { db } from "~/db";
 import { Users } from "~/db/schema";
+import { createSession } from "~/db/session";
 
 const register = createForm({
 	email: z
@@ -41,7 +42,7 @@ if (Astro.request.method === "POST") {
 		const hashedPassword = await hash(parsed.data.password);
 
 		try {
-			await db
+			const [user] = await db
 				.insert(Users)
 				.values({
 					email: parsed.data.email,
@@ -50,13 +51,23 @@ if (Astro.request.method === "POST") {
 					lastName: parsed.data.lastName,
 				})
 				.returning();
+
+			if (!user) {
+				throw new Error("User not found");
+			}
+
+			const session = await createSession(user.id);
+
+			const response = Astro.redirect("/");
+
+			response.headers.set("Set-Cookie", session.join("; "));
+
+			return response;
 		} catch (error) {
 			return new Response("Something went wrong", {
 				status: 500,
 			});
 		}
-
-		return Astro.redirect("/login");
 	}
 }
 ---
