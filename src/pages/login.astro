@@ -43,9 +43,13 @@ if (Astro.request.method === "POST") {
 			if (!passwordMatch) {
 				errorMessage = "Invalid email or password";
 			} else {
-				await createSession(Astro, user.id);
+				const cookies = await createSession(user.id);
 
-				return Astro.redirect("/");
+				const response = Astro.redirect("/");
+
+				response.headers.set("Set-Cookie", cookies.join("; "));
+
+				return response;
 			}
 		}
 	}
