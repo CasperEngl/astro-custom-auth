@@ -13,6 +13,7 @@ RUN bun install
 RUN bun run build
 RUN bun run migrate
 
+ENV HOST 0.0.0.0
 EXPOSE $PORT
 
 CMD bun ./dist/server/entry.mjs
