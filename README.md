@@ -22,6 +22,16 @@ bun run migrate
 bun run dev
 ```
 
+Docker:
+
+```bash
+# Build the Docker image
+docker-compose build
+
+# Start the Docker container
+docker-compose up
+```
+
 ## 🚀 Project Structure
 
 Inside the Astro project, you'll find the following folders and files:
