@@ -5,8 +5,15 @@ Welcome to Astro Custom Auth, a minimal app for an authentication system with As
 ## Quick Start
 
 ```bash
+# Copy env.example to .env
+cp .env.example .env
+
 # Install dependencies
 bun install
+
+# Add sqlite.db
+mkdir data
+touch data/sqlite.db
 
 # Apply database migrations
 bun run migrate
