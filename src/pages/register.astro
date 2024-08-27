@@ -26,15 +26,31 @@ const register = createForm({
 			return !user;
 		}, "Email already exists"),
 	password: z.string().min(6, "Password must be at least 6 characters"),
-	firstName: z.string().min(2, "First name must be at least 2 characters"),
-	lastName: z.string().min(2, "Last name must be at least 2 characters"),
+	confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+	firstName: z
+		.string()
+		.min(2, "First name must be at least 2 characters")
+		.regex(
+			/^[A-Za-z\s]+$/,
+			"First name must contain only alphabetic characters and spaces",
+		),
+	lastName: z
+		.string()
+		.min(2, "Last name must be at least 2 characters")
+		.regex(
+			/^[A-Za-z\s]+$/,
+			"Last name must contain only alphabetic characters and spaces",
+		),
 });
 
 const result = await Astro.locals.form.getData(register);
 
+let formData: FormData | null = null;
+
 if (Astro.request.method === "POST") {
+	formData = await Astro.request.formData();
 	const parsed = await validateForm({
-		formData: await Astro.request.formData(),
+		formData,
 		validator: register.validator,
 	});
 
@@ -74,12 +90,12 @@ if (Astro.request.method === "POST") {
 
 <Layout>
 	<div class="container max-w-lg min-h-screen flex flex-col justify-center">
-		<h1 class="text-2xl">Register</h1>
+		<h1 class="text-2xl" transition:name="title">Register</h1>
 
 		<div class="pt-8">
 			<form method="POST" class="space-y-4">
 				<div class="grid gap-4 grid-cols-2">
-					<div>
+					<div transition:name="firstName">
 						<Label htmlFor={scope("firstName")}>First Name</Label>
 						<Input
 							id={scope("firstName")}
@@ -87,10 +103,12 @@ if (Astro.request.method === "POST") {
 							required
 							{...register.inputProps.firstName}
 							autoComplete="given-name"
+							defaultValue={formData?.get("firstName")?.toString()}
+							autoFocus
 						/>
 						<FormMessage message={result?.fieldErrors?.firstName} />
 					</div>
-					<div>
+					<div transition:name="lastName">
 						<Label htmlFor={scope("lastName")}>Last Name</Label>
 						<Input
 							id={scope("lastName")}
@@ -98,10 +116,11 @@ if (Astro.request.method === "POST") {
 							required
 							{...register.inputProps.lastName}
 							autoComplete="family-name"
+							defaultValue={formData?.get("lastName")?.toString()}
 						/>
 						<FormMessage message={result?.fieldErrors?.lastName} />
 					</div>
-					<div class="col-span-2">
+					<div class="col-span-2" transition:name="email">
 						<Label htmlFor={scope("email")}>Email</Label>
 						<Input
 							id={scope("email")}
@@ -110,10 +129,11 @@ if (Astro.request.method === "POST") {
 							{...register.inputProps.email}
 							type="email"
 							autoComplete="email"
+							defaultValue={formData?.get("email")?.toString()}
 						/>
 						<FormMessage message={result?.fieldErrors?.email} />
 					</div>
-					<div class="col-span-2">
+					<div transition:name="password">
 						<Label htmlFor={scope("password")}>Password</Label>
 						<Input
 							id={scope("password")}
@@ -123,13 +143,30 @@ if (Astro.request.method === "POST") {
 							type="password"
 							autoComplete="new-password"
 						/>
+						<FormMessage
+							id="password-mismatch"
+							message={["Passwords do not match"]}
+							style="display: none"
+						/>
 						<FormMessage message={result?.fieldErrors?.password} />
+					</div>
+					<div transition:name="confirmPassword">
+						<Label htmlFor={scope("confirmPassword")}>Confirm Password</Label>
+						<Input
+							id={scope("confirmPassword")}
+							placeholder="••••••••"
+							required
+							{...register.inputProps.confirmPassword}
+							type="password"
+							autoComplete="new-password"
+						/>
+						<FormMessage message={result?.fieldErrors?.confirmPassword} />
 					</div>
 				</div>
 
-				<Button type="submit">Register</Button>
+				<Button type="submit" transition:name="submit">Register</Button>
 
-				<p class="pt-4">
+				<p class="pt-4" transition:name="login">
 					Already have an account? <a href="/login" class="text-blue-500">
 						Login
 					</a>
@@ -138,3 +175,26 @@ if (Astro.request.method === "POST") {
 		</div>
 	</div>
 </Layout>
+
+<script is:inline data-astro-rerun>
+	document.querySelector("form")?.addEventListener("submit", (event) => {
+		const form = event.target;
+		const password = form.elements.password;
+		const confirmPassword = form.elements.confirmPassword;
+
+		if (password.value !== confirmPassword.value) {
+			event.preventDefault();
+
+			document.querySelector("#password-mismatch").style.display = "block";
+
+			password.value = "";
+			confirmPassword.value = "";
+
+			password.focus();
+		}
+	});
+
+	document.querySelector("form")?.addEventListener("input", () => {
+		document.querySelector("#password-mismatch").style.display = "none";
+	});
+</script>
