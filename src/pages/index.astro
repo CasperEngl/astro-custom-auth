@@ -37,15 +37,19 @@ const users = await db.select().from(Users).limit(10);
 
 			<h2 class="text-xl">Users</h2>
 
-			<ul>
-				{
-					users.map((user) => (
-						<li>
-							{user.fullName} ({user.email})
-						</li>
-					))
-				}
-			</ul>
+			{
+				users.length > 0 ? (
+					<ul class="list-disc list-inside">
+						{users.map((user) => (
+							<li>
+								{user.fullName} ({user.email})
+							</li>
+						))}
+					</ul>
+				) : (
+					<p>No users found</p>
+				)
+			}
 		</div>
 	</div>
 </Layout>
