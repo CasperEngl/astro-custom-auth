@@ -195,6 +195,10 @@ if (Astro.request.method === "POST") {
 	});
 
 	document.querySelector("form")?.addEventListener("input", () => {
-		document.querySelector("#password-mismatch").style.display = "none";
+		for (const element of document.querySelectorAll(
+			'[aria-live="assertive"]',
+		)) {
+			element.style.display = "none";
+		}
 	});
 </script>
