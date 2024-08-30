@@ -1,5 +1,5 @@
 ---
-import { hash } from "argon2";
+import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { createForm, validateForm } from "simple:form";
 import { scope } from "simple:scope";
@@ -55,7 +55,7 @@ if (Astro.request.method === "POST") {
 	});
 
 	if (parsed.data) {
-		const hashedPassword = await hash(parsed.data.password);
+		const hashedPassword = await bcrypt.hash(parsed.data.password, 10);
 
 		try {
 			const [user] = await db
