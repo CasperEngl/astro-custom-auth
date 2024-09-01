@@ -1,0 +1,6 @@
+This is an Astro (https://astro.build/) project. The runtime used is Node.js.
+For scripts and node modules we use Bun (https://bun.sh/).
+Project uses Tailwind CSS (https://tailwindcss.com/) for styling.
+The database is SQLite (https://www.sqlite.org/index.html).
+
+Don't be lazy, write all the code to implement features I ask for.
