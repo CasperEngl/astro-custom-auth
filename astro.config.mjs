@@ -19,4 +19,8 @@ export default defineConfig({
 			applyBaseStyles: false,
 		}),
 	],
+	server: {
+		host: process.env.HOST,
+		port: process.env.PORT,
+	},
 });
