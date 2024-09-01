@@ -2,9 +2,6 @@ services:
   app:
     build: .
     ports:
-      - "8080:8080"
-    environment:
-      - PORT=8080
-      - DATABASE_URL=/app/data/sqlite.db
+      - "${PORT:-3000}:${PORT:-3000}"
     volumes:
       - ./data:/app/data
