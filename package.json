@@ -4,8 +4,8 @@
 	"type": "module",
 	"scripts": {
 		"astro": "astro",
-		"build": "bunx --bun astro build",
-		"dev": "bunx --bun astro dev",
+		"build": "astro build",
+		"dev": "astro dev",
 		"preview": "astro preview",
 		"generate": "drizzle-kit generate",
 		"migrate": "drizzle-kit migrate"
@@ -20,8 +20,10 @@
 		"@radix-ui/react-label": "^2.1.0",
 		"@radix-ui/react-slot": "^1.1.0",
 		"@types/bcrypt": "^5.0.2",
+		"@types/better-sqlite3": "^7.6.11",
 		"astro": "^4.14.5",
 		"bcrypt": "^5.1.1",
+		"better-sqlite3": "^11.2.1",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"dotenv": "^16.4.5",

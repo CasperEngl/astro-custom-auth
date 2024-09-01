@@ -1,18 +1,19 @@
-FROM oven/bun:latest AS runtime
+FROM node:20 AS runtime
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential curl vim sqlite3 && \
-  curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-  apt-get install -y nodejs
+RUN apt-get update && apt-get install -y build-essential curl vim sqlite3
+RUN curl -fsSL https://bun.sh/install | bash
+
+ENV PATH="/root/.bun/bin:$PATH"
 
 COPY . .
 
 RUN bun install
-RUN bun --bun run build
+RUN bun run build
 RUN mkdir -p data && touch data/sqlite.db
-RUN bun --bun run migrate
+RUN bun run migrate
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT
 
-CMD bun ./dist/server/entry.mjs
+CMD node ./dist/server/entry.mjs
