@@ -9,7 +9,8 @@ COPY . .
 
 RUN bun install
 RUN bun --bun run build
-# RUN bun --bun run migrate
+RUN mkdir -p data && touch data/sqlite.db
+RUN bun --bun run migrate
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT
