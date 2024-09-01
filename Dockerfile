@@ -1,10 +1,8 @@
 FROM node:20 AS runtime
 WORKDIR /app
 
-ARG PORT
 ARG DATABASE_URL
 
-ENV PORT=$PORT
 ENV DATABASE_URL=$DATABASE_URL
 
 RUN apt-get update && apt-get install -y build-essential curl vim sqlite3
@@ -22,4 +20,4 @@ RUN bun run migrate
 ENV HOST 0.0.0.0
 EXPOSE $PORT
 
-CMD node ./dist/server/entry.mjs
+CMD node ./dist/server/entry.mjs --HOST $HOST
