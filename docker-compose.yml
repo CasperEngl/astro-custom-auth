@@ -4,7 +4,7 @@ services:
     ports:
       - "${PORT:-8080}:${PORT}"
     environment:
-      - PORT=8080
-      - DATABASE_URL=/app/data/sqlite.db
+      - PORT=${PORT:-8080}
+      - DATABASE_URL=${DATABASE_URL:-/app/data/sqlite.db}
     volumes:
       - ./data:/app/data
