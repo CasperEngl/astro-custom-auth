@@ -19,3 +19,4 @@ cpus = 1
 [env]
 DATABASE_URL = "/data/sqlite.db"
 PORT = "4321"
+MIGRATE = "true"
