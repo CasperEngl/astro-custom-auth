@@ -19,5 +19,3 @@ RUN bun run migrate
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT
-
-CMD node ./dist/server/entry.mjs --HOST $HOST
