@@ -19,7 +19,6 @@ cpus = 1
 [env]
 DATABASE_URL = "/app/data/sqlite.db"
 PORT = "4321"
-MIGRATE = "true"
 
 [mounts]
 source = "data_volume"
