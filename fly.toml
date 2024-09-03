@@ -17,9 +17,9 @@ cpu_kind = 'shared'
 cpus = 1
 
 [env]
-DATABASE_URL = "/app/data/sqlite.db"
+DATABASE_URL = "/data/sqlite.db"
 PORT = "4321"
 
 [mounts]
 source = "data_volume"
-destination = "/app/data"
+destination = "/data"

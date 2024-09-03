@@ -1,7 +1,7 @@
-if [ ! -d "/app/data" ]; then
-  mkdir -p /app/data
+if [ ! -d "/data" ]; then
+  mkdir -p /data
 fi
 
-if [ ! -f "/app/data/sqlite.db" ]; then
-  touch /app/data/sqlite.db
+if [ ! -f "/data/sqlite.db" ]; then
+  touch /data/sqlite.db
 fi
