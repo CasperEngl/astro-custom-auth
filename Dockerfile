@@ -11,7 +11,7 @@ ENV PATH="/root/.bun/bin:$PATH"
 
 COPY . .
 
-RUN mkdir -p data && touch data/sqlite.db
+RUN mkdir -p /data && touch /data/sqlite.db
 RUN bun install
 RUN bun run build
 
