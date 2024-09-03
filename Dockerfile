@@ -11,9 +11,9 @@ ENV PATH="/root/.bun/bin:$PATH"
 
 COPY . .
 
+RUN mkdir -p data && touch data/sqlite.db
 RUN bun install
 RUN bun run build
-RUN mkdir -p data && touch data/sqlite.db
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT
