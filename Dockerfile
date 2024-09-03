@@ -2,7 +2,6 @@ FROM node:20 AS runtime
 WORKDIR /app
 
 ARG DATABASE_URL
-
 ENV DATABASE_URL=$DATABASE_URL
 
 RUN apt-get update && apt-get install -y build-essential curl vim sqlite3
