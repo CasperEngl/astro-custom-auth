@@ -13,6 +13,7 @@ COPY . .
 
 RUN bun install
 RUN bun run build
+RUN mkdir -p data && touch data/sqlite.db
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT
