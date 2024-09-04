@@ -21,7 +21,7 @@
 		"@radix-ui/react-slot": "^1.1.0",
 		"@types/bcrypt": "^5.0.2",
 		"@types/better-sqlite3": "^7.6.11",
-		"astro": "^4.14.5",
+		"astro": "4.15.2",
 		"bcrypt": "^5.1.1",
 		"better-sqlite3": "^11.2.1",
 		"class-variance-authority": "^0.7.0",
