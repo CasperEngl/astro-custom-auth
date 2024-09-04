@@ -15,7 +15,7 @@ proxy:
     - "*.png"
 
 exec:
-  - cmd: "bunx drizzle-kit migrate"
+  - cmd: "./scripts/migrate.sh"
     if-candidate: true
   - cmd:
       ["node", "./dist/server/entry.mjs", "--HOST", "$HOST", "--PORT", "$PORT"]
