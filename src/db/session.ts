@@ -49,6 +49,10 @@ export async function getSession(request: Request) {
 		.from(Sessions)
 		.where(eq(Sessions.sessionId, sessionId));
 
+	if (!session) {
+		return null;
+	}
+
 	return session;
 }
 
