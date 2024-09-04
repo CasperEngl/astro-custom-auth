@@ -20,3 +20,7 @@ cpus = 1
 DATABASE_URL = "/data/sqlite.db"
 PORT = "4321"
 MIGRATE = "true"
+
+[mounts]
+source = "litefs"
+destination = "/var/lib/litefs"
