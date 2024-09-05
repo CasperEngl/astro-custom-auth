@@ -11,11 +11,11 @@ ENV PATH="/root/.bun/bin:$PATH"
 
 COPY . .
 
-RUN mkdir -p /data && touch /data/sqlite.db
+RUN mkdir -p /app/data && touch /app/data/sqlite.db
 RUN bun install
 RUN bun run build
 
 ENV HOST 0.0.0.0
 EXPOSE $PORT
 
-CMD ["node", "./dist/server/entry.mjs", "--HOST", "$HOST", "--PORT", "$PORT"]
+CMD node ./dist/server/entry.mjs --HOST $HOST --PORT $PORT
