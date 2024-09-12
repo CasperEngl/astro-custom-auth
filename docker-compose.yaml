@@ -2,10 +2,6 @@ services:
   app:
     build: .
     ports:
-      - "${PORT:-8080}:${PORT}"
-    environment:
-      - PORT=${PORT:-8080}
-      - DATABASE_URL=${DATABASE_URL:-/data/sqlite.db}
-      - MIGRATE=true
-    volumes:
-      - ./data:/data
+      - "4321:${PORT:-4321}"
+    env_file:
+      - .env
