@@ -1,0 +1,12 @@
+services:
+  app:
+    extends:
+      file: docker-compose.yaml
+      service: app
+    ports:
+      - '${PORT}:${PORT}'
+    volumes:
+      - db-data:/data
+
+volumes:
+  db-data:

@@ -1,12 +1,9 @@
 services:
   app:
     build: .
-    ports:
-      - "4322:${PORT:-4322}"
     env_file:
       - .env
+    ports:
+      - "4321:4321"
     volumes:
-      - db-data:/data
-
-volumes:
-  db-data:
+      - ./data:/data
