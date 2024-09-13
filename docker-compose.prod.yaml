@@ -3,6 +3,8 @@ services:
     extends:
       file: docker-compose.yaml
       service: app
+    environment:
+      - PORT=${PORT}
     ports:
       - '${PORT}:${PORT}'
     volumes:
