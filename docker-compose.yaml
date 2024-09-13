@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ${VOLUME_MAPPING}
+      - db-data:/data
 
 volumes:
   db-data:
