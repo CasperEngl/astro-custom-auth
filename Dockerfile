@@ -8,10 +8,9 @@ ENV PATH="/root/.bun/bin:$PATH"
 
 COPY . .
 
-RUN mkdir -p /data && [ ! -f /data/sqlite.db ] && touch /data/sqlite.db
 RUN bun install
 RUN bun run build
 
 EXPOSE $PORT
 
-CMD node ./dist/server/entry.mjs --host $HOST --port $PORT
+CMD node ./dist/server/entry.mjs --port $PORT

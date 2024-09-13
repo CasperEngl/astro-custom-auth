@@ -5,3 +5,8 @@ services:
       - "4322:${PORT:-4322}"
     env_file:
       - .env
+    volumes:
+      - ${VOLUME_MAPPING}
+
+volumes:
+  db-data:

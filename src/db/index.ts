@@ -7,9 +7,7 @@ import * as schema from "./schema";
 
 invariant(process.env.DATABASE_URL, "DATABASE_URL is not set");
 
-const sqlite = new Database(process.env.DATABASE_URL, {
-	fileMustExist: true,
-});
+const sqlite = new Database(process.env.DATABASE_URL);
 export const db = drizzle(sqlite, { schema });
 
 if (process.env.MIGRATE === "true") {
