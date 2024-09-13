@@ -4,7 +4,7 @@ services:
       file: docker-compose.yaml
       service: app
     ports:
-      - '4322:4321'
+      - '${PORT}:${PORT}'
     volumes:
       - db-data:/data
 
