@@ -1,8 +1,8 @@
 services:
   app:
-    extends:
-      file: docker-compose.yaml
-      service: app
+    build: .
+    env_file:
+      - .env
     ports:
       - '4322:4322'
     volumes:
